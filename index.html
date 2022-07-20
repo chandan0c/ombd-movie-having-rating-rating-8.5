@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>search your movie here</h1>
+    <input type="text" placeholder="enter movie name" id="movieName">
+    <button onclick="movieData()">search</button>
+    <div id="container">
+
+    </div>
+</body>
+</html>
+<script>
+    async function movieData(){
+        let movieName=document.getElementById("movieName").value;
+        let key="733e1806"
+        let url=`http://www.omdbapi.com/?apikey=${key}&t=${movieName}`
+        let res=await fetch(url);
+        let data=await res.json();
+        if(data.Error){
+            let container=document.getElementById("container");
+             container.innerText=data.Error;
+            console.log(data.Error);
+        }
+        else{
+            fetchData(data);
+        }
+        
+    }
+    
+    async function fetchData(data){
+        let container=document.getElementById("container");
+        container.innerText=""
+        let image=document.createElement("img");
+        image.src=data.Poster;
+        let title=document.createElement("p");
+        title.innerText=data.Title;
+        let rating=document.createElement("p");
+        rating.innerText=data.imdbRating;
+        let recommend=document.createElement("p");
+        recommend.innerText="recommended"
+        if(data.imdbRating>8.5){
+            container.append(image,title,rating,recommend);
+        }
+        else{
+            container.append(image,title,rating);
+        }
+    }
+</script>
